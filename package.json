@@ -19,7 +19,7 @@
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build"
   },
-  "homepage": "https://maxlogvinov.github.io/mesto-react/",
+  "homepage": "https://maxlogvinov.github.io/react-mesto-auth/",
   "eslintConfig": {
     "extends": [
       "react-app",
