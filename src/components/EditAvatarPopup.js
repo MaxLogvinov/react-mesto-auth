@@ -12,6 +12,7 @@ function EditAvatarPopup(props) {
     e.preventDefault();
     props.onUpdateAvatar({ avatar: avatarRef.current.value });
   }
+
   return (
     <PopupWithForm
       name="avatar"
@@ -19,6 +20,7 @@ function EditAvatarPopup(props) {
       textSaveButton="Сохранить"
       isOpen={props.isOpen}
       onClose={props.onClose}
+      onEscClose={props.onEscClose}
       onSubmit={handleSubmit}
     >
       <input

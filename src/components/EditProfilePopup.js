@@ -35,6 +35,7 @@ function EditProfilePopup(props) {
       textSaveButton="Сохранить"
       isOpen={props.isOpen}
       onClose={props.onClose}
+      onEscClose={props.onEscClose}
       onSubmit={handleSubmit}
     >
       <input

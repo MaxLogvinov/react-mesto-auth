@@ -31,6 +31,7 @@
 @import url(./blocks/popup-photo/popup-photo.css);
 @import url(./blocks/popup/_opened/popup_opened.css);
 @import url(./blocks/popup/__container/popup__container.css);
+@import url(./blocks/popup/__container/_type/popup__container_type_infoTooltip.css);
 @import url(./blocks/popup/__close-button/popup__close-button.css);
 @import url(./blocks/popup/__title/popup__title.css);
 @import url(./blocks/popup/__form/popup__form.css);
@@ -45,3 +46,12 @@
 @import url(./blocks/popup/__save-button/_type/popup__save-button_type_delete.css);
 @import url(./blocks/popup/__form/_type/popup__form_type_delete.css);
 @import url(./blocks/popup/__title/_type/popup__title_type_delete.css);
+@import url(./blocks/popup/__title/_type/popup__title_type_infoTooltip.css);
+@import url(./blocks/auth/auth.css);
+@import url(./blocks/auth/__title/auth__title.css);
+@import url(./blocks/auth/__form/auth__form.css);
+@import url(./blocks/auth/__input/auth__input.css);
+@import url(./blocks/auth/__input-error/auth__input-error.css);
+@import url(./blocks/auth/__button/auth__button.css);
+@import url(./blocks/auth/__sign-up/auth__sign-up.css);
+@import url(./blocks/not-found/not-found.css);

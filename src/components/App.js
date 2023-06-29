@@ -1,4 +1,5 @@
 import React from 'react';
+import { Routes, Route, Navigate } from 'react-router-dom';
 import '../index.css';
 import Header from './Header';
 import Main from './Main';
@@ -8,11 +9,20 @@ import EditAvatarPopup from './EditAvatarPopup';
 import AddPlacePopup from './AddPlacePopup';
 import ImagePopup from './ImagePopup';
 import api from '../utils/Api';
+import auth from '../utils/Auth';
 import CurrentUserContext from '../contexts/CurrentUserContext';
+import Login from './Login';
+import Register from './Register';
+import ProtectedRoute from './ProtectedRoute';
+import PageNotFound from './PageNotFound';
+import InfoTooltip from './InfoTooltip';
 
 function App() {
   const [currentUser, setCurrentUser] = React.useState('');
   const [cards, setCards] = React.useState([]);
+  const [isLoggedIn, setIsLoggedIn] = React.useState(false);
+  const [isRegistered, setIsRegistered] = React.useState(false);
+  const [email, setEmail] = React.useState('');
 
   React.useEffect(() => {
     Promise.all([api.getUserInfo(), api.getInitialCards()])
@@ -34,6 +44,9 @@ function App() {
     React.useState(false);
 
   const [isImagePopupOpen, setIsImagePopupOpen] = React.useState(false);
+
+  const [isInfoTooltipPopupOpen, setIsInfoTooltipPopupOpen] =
+    React.useState(false);
 
   const [selectedCard, setSelectedCard] = React.useState({});
 
@@ -59,7 +72,15 @@ function App() {
     setIsEditProfilePopupOpen(false);
     setIsAddPlacePopupOpen(false);
     setIsImagePopupOpen(false);
+    setIsInfoTooltipPopupOpen(false);
   }
+
+  function handleEscClose(e) {
+    if (e.key === 'Escape') {
+      closeAllPopups();
+    }
+  }
+
   function handleCardLike(card) {
     const isLiked = card.likes.some((i) => i._id === currentUser._id);
     api
@@ -123,40 +144,93 @@ function App() {
       });
   }
 
+  function handleRegister(password, email) {
+    auth
+      .register(password, email)
+      .then(() => {
+        setIsRegistered(true);
+        setIsInfoTooltipPopupOpen(true);
+      })
+      .catch((err) => {
+        console.log(err);
+        setIsInfoTooltipPopupOpen(true);
+        setIsRegistered(false);
+      });
+  }
+
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <div className="app">
         <div className="page">
           <Header />
-          <Main
-            onEditProfile={handleEditProfileClick}
-            onAddPlace={handleAddPlaceClick}
-            onEditAvatar={handleEditAvatarClick}
-            onCardClick={handleCardClick}
-            onCardLike={handleCardLike}
-            onCardDelete={handleCardDelete}
-            cards={cards}
-          />
+          <Routes>
+            <Route
+              path="/"
+              element={
+                <ProtectedRoute
+                  // loggedIn={isLoggedIn}
+                  element={Main}
+                  onEditProfile={handleEditProfileClick}
+                  onAddPlace={handleAddPlaceClick}
+                  onEditAvatar={handleEditAvatarClick}
+                  onCardClick={handleCardClick}
+                  onCardLike={handleCardLike}
+                  onCardDelete={handleCardDelete}
+                  cards={cards}
+                />
+              }
+            />
+            <Route
+              path="/sign-up"
+              element={
+                <Register
+                  onRegister={handleRegister}
+                  isRegistered={isRegistered}
+                />
+              }
+            />
+            <Route
+              path="/sign-in"
+              element={<Login handleLogin={setIsLoggedIn} />}
+            />
+            <Route path="*" element={<PageNotFound />} />
+            <Route
+              path="/react-mesto-auth"
+              element={
+                isLoggedIn ? <Navigate to="/" /> : <Navigate to="/sign-in" />
+              }
+            />
+          </Routes>
           <Footer />
           <EditProfilePopup
             isOpen={isEditProfilePopupOpen}
             onClose={closeAllPopups}
             onUpdateUser={handleUpdateUser}
-          ></EditProfilePopup>
+            onEscClose={handleEscClose}
+          />
           <AddPlacePopup
             isOpen={isAddPlacePopupOpen}
             onClose={closeAllPopups}
             onAddCard={handleAddCard}
+            onEscClose={handleEscClose}
           />
           <EditAvatarPopup
             isOpen={isEditAvatarPopupOpen}
             onClose={closeAllPopups}
             onUpdateAvatar={handleUpdateAvatar}
+            onEscClose={handleEscClose}
           />
           <ImagePopup
             isOpen={isImagePopupOpen}
             card={selectedCard}
             onClose={closeAllPopups}
+            onEscClose={handleEscClose}
+          />
+          <InfoTooltip
+            isOpen={isInfoTooltipPopupOpen}
+            onClose={closeAllPopups}
+            onEscClose={handleEscClose}
+            isRegistered={isRegistered}
           />
           {/* <section className="popup popup-delete popup_type_delete">
           <div className="popup__container">
