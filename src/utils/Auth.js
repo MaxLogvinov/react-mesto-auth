@@ -34,6 +34,16 @@ class Auth {
       return this._checkResponse(res);
     });
   }
+  getContent(token) {
+    return fetch(`${this._url}users/me`, {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+    }).then((res) => {
+      return this._checkResponse(res);
+    });
+  }
 }
 
 const auth = new Auth('https://auth.nomoreparties.co/');

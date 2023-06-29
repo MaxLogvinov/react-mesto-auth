@@ -16,7 +16,8 @@ function InfoTooltip({ isOpen, onClose, onEscClose, isRegistered }) {
       document.addEventListener('keydown', onEscClose);
       return () => document.removeEventListener('keydown', onEscClose);
     }
-  }, [isOpen, onEscClose]);
+    //eslint-disable-next-line
+  }, [isOpen]);
 
   function redirectPopup() {
     if (isRegistered) {

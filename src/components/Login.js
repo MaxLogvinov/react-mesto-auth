@@ -1,12 +1,30 @@
 import React from 'react';
 
-function Login() {
-  const [email, setEmail] = React.useState('');
-  const [password, setPassword] = React.useState('');
+function Login({ onLogin }) {
+  const [formValue, setFormValue] = React.useState({
+    email: '',
+    password: '',
+  });
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+
+    setFormValue({
+      ...formValue,
+      [name]: value,
+    });
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    onLogin(formValue.password, formValue.email);
+    setFormValue('');
+  };
+
   return (
     <div className="auth">
       <h2 className="auth__title">Вход</h2>
-      <form className="auth__form">
+      <form className="auth__form" onSubmit={handleSubmit}>
         <input
           type="email"
           className="auth__input"
@@ -16,7 +34,8 @@ function Login() {
           required
           minLength="8"
           maxLength="40"
-          value={email || ''}
+          value={formValue.email || ''}
+          onChange={handleChange}
         />
         <span className="auth__input-error auth-error" />
         <input
@@ -28,7 +47,8 @@ function Login() {
           required
           minLength="2"
           maxLength="30"
-          value={password || ''}
+          value={formValue.password || ''}
+          onChange={handleChange}
         />
         <span className="auth__input-error auth-error" />
         <button type="submit" className="auth__button">

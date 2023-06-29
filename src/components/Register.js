@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 function Register({ onRegister }) {
   const [formValue, setFormValue] = React.useState({
@@ -54,7 +55,9 @@ function Register({ onRegister }) {
         <button type="submit" className="auth__button">
           Зарегистрироваться
         </button>
-        <p className="auth__sign-up">Уже зарегистрированы? Войти</p>
+        <Link to="sign-in" className="auth__sign-up">
+          Уже зарегистрированы? Войти
+        </Link>
       </form>
     </div>
   );

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Routes, Route, Navigate } from 'react-router-dom';
+import { Routes, Route, Navigate, useNavigate } from 'react-router-dom';
 import '../index.css';
 import Header from './Header';
 import Main from './Main';
@@ -18,6 +18,7 @@ import PageNotFound from './PageNotFound';
 import InfoTooltip from './InfoTooltip';
 
 function App() {
+  const navigate = useNavigate();
   const [currentUser, setCurrentUser] = React.useState('');
   const [cards, setCards] = React.useState([]);
   const [isLoggedIn, setIsLoggedIn] = React.useState(false);
@@ -158,17 +159,63 @@ function App() {
       });
   }
 
+  function handleLogin(password, email) {
+    auth
+      .authorize(password, email)
+      .then((res) => {
+        setEmail(email);
+        localStorage.setItem('token', res.token);
+        setIsLoggedIn(true);
+        navigate('/', { replace: true });
+      })
+      .catch((err) => {
+        console.log(err);
+        setIsInfoTooltipPopupOpen(true);
+      });
+  }
+
+  const checkToken = React.useCallback(() => {
+    const token = localStorage.getItem('token');
+    auth
+      .getContent(token)
+      .then((res) => {
+        if (!res) {
+          return;
+        }
+        setEmail(res.data.email);
+        setIsLoggedIn(true);
+        navigate('/', { replace: true });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, [navigate]);
+
+  React.useEffect(() => {
+    checkToken();
+    //eslint-disable-next-line
+  }, []);
+
+  function handleSignOut() {
+    localStorage.removeItem('token');
+    setIsLoggedIn(false);
+  }
+
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <div className="app">
         <div className="page">
-          <Header />
+          <Header
+            isLoggedIn={isLoggedIn}
+            email={email}
+            onSignOut={handleSignOut}
+          />
           <Routes>
             <Route
               path="/"
               element={
                 <ProtectedRoute
-                  // loggedIn={isLoggedIn}
+                  isLoggedIn={isLoggedIn}
                   element={Main}
                   onEditProfile={handleEditProfileClick}
                   onAddPlace={handleAddPlaceClick}
@@ -189,10 +236,7 @@ function App() {
                 />
               }
             />
-            <Route
-              path="/sign-in"
-              element={<Login handleLogin={setIsLoggedIn} />}
-            />
+            <Route path="/sign-in" element={<Login onLogin={handleLogin} />} />
             <Route path="*" element={<PageNotFound />} />
             <Route
               path="/react-mesto-auth"
