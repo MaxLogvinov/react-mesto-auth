@@ -19,7 +19,6 @@ import ProtectedRoute from './ProtectedRoute';
 import PageNotFound from './PageNotFound';
 import InfoTooltip from './InfoTooltip';
 
-//Исправил ошибки прошлого ревью + добавил дату в футер + попап удаления карточки + изменение текста кнопки при загрузке + мобильную версию  хэдер меню
 
 function App() {
   const navigate = useNavigate();
