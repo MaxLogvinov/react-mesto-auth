@@ -18,7 +18,7 @@ function Login({ onLogin }) {
   const handleSubmit = (e) => {
     e.preventDefault();
     onLogin(formValue.password, formValue.email);
-    setFormValue('');
+    setFormValue({});
   };
 
   return (

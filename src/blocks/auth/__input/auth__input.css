@@ -8,3 +8,9 @@
   width: 358px;
   height: 26px;
 }
+
+@media (max-width: 767px) {
+  .auth__input {
+    max-width: 260px;
+  }
+}

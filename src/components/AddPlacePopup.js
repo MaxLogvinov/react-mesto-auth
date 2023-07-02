@@ -33,10 +33,12 @@ function AddPlacePopup(props) {
       name="add"
       title="Новое место"
       textSaveButton="Создать"
+      textSavingButton="Сохранение..."
       isOpen={props.isOpen}
       onClose={props.onClose}
       onEscClose={props.onEscClose}
       onSubmit={handleAddPlaceSubmit}
+      isLoading={props.isLoading}
     >
       <input
         type="text"
